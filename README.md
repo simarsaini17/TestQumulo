@@ -75,3 +75,7 @@ bun dev
 ```
 
 The application will be accessible at http://localhost:3000.
+
+Screenshot
+![alt text](<Screen Shot 2024-04-10 at 6.21.43 PM.png>)
+![alt text](<Screen Shot 2024-04-10 at 6.21.51 PM.png>)
