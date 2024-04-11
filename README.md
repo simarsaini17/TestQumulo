@@ -10,8 +10,6 @@ This repository contains a data visualization project with the frontend built us
 - [Running the Application](#running-the-application)
   - [Frontend](#frontend)
   - [Backend](#backend)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Getting Started
 
@@ -36,8 +34,10 @@ Make sure you have the following installed on your system:
 
    For backend
 
-2. cd qumuloapi
-   npm install
+2. ```bash
+   cd qumuloapi
+    npm install
+   ```
 
 ### Migrations
 
@@ -46,6 +46,8 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+## Running the Application
 
 To run adonis js
 
@@ -59,8 +61,10 @@ Steps to setup Frontend
 
 1. Navigate to the frontend directory:
 
+```bash
 cd frontend
 npm install
+```
 
 2. Start the development server:
 
@@ -77,5 +81,5 @@ bun dev
 The application will be accessible at http://localhost:3000.
 
 Screenshot
-![alt text](<Screen Shot 2024-04-10 at 6.21.43 PM.png>)
-![alt text](<Screen Shot 2024-04-10 at 6.21.51 PM.png>)
+![alt text](<screenshots/Screen Shot 2024-04-10 at 6.21.43 PM.png>)
+![alt text](<screenshots/Screen Shot 2024-04-10 at 6.21.51 PM.png>)
