@@ -80,15 +80,14 @@ const EditSnapshot = () => {
 	};
 
 	const getCheckedDays = (event) => {
-		const checkedName = event.target.value;
-		const isChecked = event.target.checked;
-		if (isChecked) {
-			setCheckedDays((checkedDays) => [...checkedDays, checkedName]);
+		const { value } = event.target;
+		if (event.target.checked) {
+			setCheckedDays((prevDays) => [...prevDays, value]);
 		} else {
-			const filteredDays = checkedDays.filter((day) => day !== checkedName);
-			setCheckedDays([...filteredDays]);
+			setCheckedDays(checkedDays.filter((day) => day !== value));
 		}
 	};
+
 	const getSnapshotValue = (event) => {
 		const isSelectedRadioChecked = event.target.value;
 		setCheckedRadioButton({ value: isSelectedRadioChecked });
@@ -129,12 +128,12 @@ const EditSnapshot = () => {
 				'http://127.0.0.1:3333/api/snapshot-config',
 				snapShotConfigData
 			);
+			console.log('I am here');
+			resetFormValue();
 			return response.data;
 		} catch (error) {
 			console.log('There is problem in saving data', error);
 		}
-
-		resetFormValue();
 	};
 
 	return (
@@ -221,7 +220,6 @@ const EditSnapshot = () => {
 										name={eachLable}
 										value={eachLable}
 										onChange={getCheckedDays}
-										required={false}
 										className='m-1'
 									/>
 									<label>{eachLable}</label>
