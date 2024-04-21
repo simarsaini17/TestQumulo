@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { EventHandler, useState } from 'react';
 import Input from './Input';
 import axios from 'axios';
 const checkboxLable = [
@@ -18,6 +18,7 @@ type SnapshotConfigDataType = {
 	policy_directory: string;
 	schedule: string;
 	timezone: string;
+	snapshot_time: string;
 	snapshot_days: string;
 	deletion_time: string;
 };
@@ -32,30 +33,28 @@ const EditSnapshot = () => {
 	});
 	const [minutes, setMinutes] = useState('');
 	const [hour, setHour] = useState('');
-	const [deletionTime, setDeletionTime] = useState({ value: 'hour' });
+	const [deletionTime, setDeletionTime] = useState('hour');
 	const [deleteSnapshot, setDeleteSnapshotTime] = useState('');
 
 	const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-	const getPolicyName = (event) => {
-		event.stopPropagation();
-		const value = event.target.value;
+	const getPolicyName = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		const value = event.currentTarget.value;
 		setPolicyName(value);
 	};
 
-	const getDirectoryName = (event) => {
-		event.stopPropogation;
-		const value = event.target.value;
+	const getDirectoryName = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		const value = event.currentTarget.value;
 		setDirectoryName(value);
 	};
 
-	const getScheduleType = (event) => {
-		const value = event.target.value;
+	const getScheduleType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = event.currentTarget.value;
 		setscheduleType(value);
 	};
 
-	const getHours = (event) => {
-		const { value } = event.target;
+	const getHours = (event: React.SyntheticEvent<HTMLInputElement>) => {
+		const { value } = event.currentTarget;
 		const newValue = parseInt(value);
 		if (newValue >= 0 && newValue <= 23) {
 			setHour(value);
@@ -64,8 +63,8 @@ const EditSnapshot = () => {
 		}
 	};
 
-	const getMinutes = (event) => {
-		const { value } = event.target;
+	const getMinutes = (event: React.SyntheticEvent<HTMLInputElement>) => {
+		const { value } = event.currentTarget;
 		const newValue = parseInt(value);
 		if (newValue >= 0 && newValue <= 59) {
 			setMinutes(value);
@@ -79,24 +78,24 @@ const EditSnapshot = () => {
 		setDeleteSnapshotTime(value);
 	};
 
-	const getCheckedDays = (event) => {
-		const { value } = event.target;
-		if (event.target.checked) {
+	const getCheckedDays = (event: React.SyntheticEvent<HTMLInputElement>) => {
+		const { value } = event.currentTarget;
+		const isChecked = event.currentTarget.checked;
+		if (isChecked) {
 			setCheckedDays((prevDays) => [...prevDays, value]);
 		} else {
 			setCheckedDays(checkedDays.filter((day) => day !== value));
 		}
 	};
 
-	const getSnapshotValue = (event) => {
-		const isSelectedRadioChecked = event.target.value;
+	const getSnapshotValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const isSelectedRadioChecked = event.currentTarget.value;
 		setCheckedRadioButton({ value: isSelectedRadioChecked });
 	};
 
-	const getDeletionTime = (event) => {
-		const isDeletionvalue = event.target.value;
-
-		setDeletionTime({ value: isDeletionvalue });
+	const getDeletionTime = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		const isDeletionvalue = event.currentTarget.value;
+		setDeletionTime(isDeletionvalue);
 	};
 
 	const resetFormValue = () => {
@@ -108,19 +107,25 @@ const EditSnapshot = () => {
 		setMinutes('');
 		setDeleteSnapshotTime('');
 		setCheckedRadioButton({ value: 'never' });
-		setDeletionTime({ value: 'hour' });
+		setDeletionTime('hour');
 	};
 
 	const onSnapshotSubmit = async (event) => {
 		event.preventDefault();
 		const days = checkedDays.toString();
+		const snapshotTime = `${hour}:${minutes}`;
+		const snapshotDeleteTime =
+			checkedRadioButton.value !== 'never'
+				? `${deleteSnapshot} ${deletionTime}`
+				: '';
 		const snapShotConfigData: SnapshotConfigDataType = {
 			policy_name: policyName,
 			policy_directory: directoryName,
 			schedule: scheduleType,
 			timezone: currentTimeZone,
+			snapshot_time: snapshotTime,
 			snapshot_days: days,
-			deletion_time: deleteSnapshot,
+			deletion_time: snapshotDeleteTime,
 		};
 
 		try {
@@ -128,7 +133,6 @@ const EditSnapshot = () => {
 				'http://127.0.0.1:3333/api/snapshot-config',
 				snapShotConfigData
 			);
-			console.log('I am here');
 			resetFormValue();
 			return response.data;
 		} catch (error) {
@@ -258,7 +262,7 @@ const EditSnapshot = () => {
 								<select
 									id='timeSchedule'
 									onChange={getDeletionTime}
-									value={deletionTime.value}
+									value={deletionTime}
 									className='bg-gray-500 border border-gray-700 text-center justify-center rounded-md h-8 block text-gray-200 text-sm ml-2 p-0'
 								>
 									<option value='minute'>minute(s)</option>

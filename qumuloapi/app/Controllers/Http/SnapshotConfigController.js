@@ -7,12 +7,14 @@ class SnapshotConfigController {
     const data = await SnapshotConfig.all();
     return response.json(data);
   }
+
   async update({ request, response }) {
     const newData = request.only([
       "policy_name",
       "policy_directory",
       "schedule",
       "timezone",
+      "snapshot_time",
       "snapshot_days",
       "deletion_time",
     ]);
